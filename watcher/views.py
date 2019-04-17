@@ -4,6 +4,10 @@ from .models import Room
 from .forms import RoomForm
 from django.shortcuts import redirect
 
+def room_all(request):
+    rooms = Room.objects.order_
+
+
 def room_list(request):
     rooms = Room.objects.filter(created_date__lte=timezone.now()).order_by('created_date')
     return render(request, 'watcher/room_list.html', {'rooms':rooms})
@@ -34,6 +38,7 @@ def room_edit(request, address):
         form = RoomForm(request.POST, instance=room)
         if form.is_valid():
             room = form.save(commit=False)
+            room.contact = form.cleaned_data['check']
             room.created_date = timezone.now()
             room.save()
             return redirect('room_detail', address=room.address)

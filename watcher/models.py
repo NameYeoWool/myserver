@@ -6,6 +6,7 @@ class Room(models.Model):
     address = models.CharField(max_length=300,primary_key=True)
     latitude = models.FloatField(blank=False)
     longitude =models.FloatField(blank=False)
+    contact = models.BooleanField(default=False,help_text="가맹점일 경우 체크하시오.")
     created_date = models.DateTimeField(default=timezone.now)
     notice = models.TextField(blank=True)
     spec = models.TextField(blank=True)
