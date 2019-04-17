@@ -1,0 +1,13 @@
+{% extends 'watcher/base.html' %}
+
+{% block content %}
+    <div class="room">
+        {% if room.created_date %}
+            <div class="date">
+                {{ room.created_date }}
+            </div>
+        {% endif %}
+        <h1>{{ room.name }}</h1>
+        <p>{{ room.notice|linebreaksbr }}</p>
+    </div>
+{% endblock %}
