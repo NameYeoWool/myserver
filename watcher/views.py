@@ -5,6 +5,7 @@ from .models import Room
 from .forms import RoomForm
 from django.shortcuts import redirect
 from django.http import HttpResponse, JsonResponse
+import logging
 
 def room_all(request):
     rooms_contact = Room.objects.filter(contact=True).order_by('created_date')
@@ -82,8 +83,6 @@ def room_edit(request, address):
         form = RoomForm(request.POST, instance=room)
         if form.is_valid():
             room = form.save(commit=False)
-            room.contact = form.cleaned_data['check']
-            room.created_date = timezone.now()
             room.save()
             return redirect('room_detail', address=room.address)
     else:
