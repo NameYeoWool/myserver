@@ -21,10 +21,10 @@ class Room(models.Model):
 
 
 class SeatInfo(models.Model):
-        room = models.ForeignKey(Room,on_delete=models.CASCADE,null=True)
+        room = models.ForeignKey(Room,on_delete=models.CASCADE)
         data = models.TextField(blank=True)
         seatImage = models.ImageField(blank=True)
         created_date = models.DateTimeField(default=timezone.now)
 
         def __str__(self):
-            return (self.room + " "+ self.created_date)
+            return ("%s %s " %(self.room.name, self.created_date) )
