@@ -7,6 +7,8 @@ from django.shortcuts import redirect
 from django.http import HttpResponse, JsonResponse
 import logging
 import json
+from django.contrib.auth.decorators import login_required
+
 
 def room_test(request):
     rooms_contact = Room.objects.filter(contact=True).order_by('created_date')
@@ -98,17 +100,24 @@ def room_list(request):
     return render(request, 'watcher/room_list.html', {'rooms':rooms})
 
 
+
+def post_draft_list(request):
+    posts = Room.objects.filter(published_date__isnull=True).order_by('created_date')
+    return render(request, 'blog/post_draft_list.html', {'posts': posts})
+
+
+
 def room_detail(request, address):
     room = get_object_or_404(Room, address=address)
     return render(request, 'watcher/room_detail.html', {'room':room})
 
-
+@login_required
 def room_new(request):
     if request.method == "POST":
         form = RoomForm(request.POST)
         if form.is_valid():
             room = form.save(commit=False)
-            room.created_date = timezone.now()
+            # room.created_date = timezone.now()
             room.save()
             return redirect('room_detail', address=room.address)
     else:
@@ -116,7 +125,7 @@ def room_new(request):
 
     return render(request, 'watcher/room_edit.html',{'form':form})
 
-
+@login_required
 def room_edit(request, address):
     room = get_object_or_404(Room, address=address)
     if request.method == "POST":
