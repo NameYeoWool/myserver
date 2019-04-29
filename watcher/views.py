@@ -34,7 +34,7 @@ def room_test(request):
                            'contact': room.contact,
                            'notice': room.notice,
                            'spec': room.spec,
-                           'cnt_empty': cnt_empty
+                           'cnt_empty': cnt_empty,
                            }
 
         contact.append(content_contact)
@@ -52,20 +52,22 @@ def room_all(request):
 
     contact=[]
     for room in rooms_contact:
-        seat_data ={"seats": "none", "total_seats": 0, "empty_seats": 0}
+        cnt_empty = 0
         seatInfos = room.seatinfo_set.filter(created_date__lt=timezone.now()).order_by('-created_date')
         if len(seatInfos) >0:
             seatInfo = seatInfos[0]
             seat_data = seatInfo.data
-        content_contact = {'name': room.name ,
-                   'address': room.address,
-                   'latitude':room.latitude,
-                   'longitude':room.longitude,
-                   'contact':room.contact,
-                   'notice':room.notice,
-                   'spec':room.spec,
-                    'seatInfo': seat_data
-                    }
+            cnt_empty = json.loads(seat_data)['empty_seats']
+        # seat_data = json.dumps(seat_data, ensure_ascii=False)
+        content_contact = {'name': room.name,
+                           'address': room.address,
+                           'latitude': room.latitude,
+                           'longitude': room.longitude,
+                           'contact': room.contact,
+                           'notice': room.notice,
+                           'spec': room.spec,
+                           'cnt_empty': cnt_empty,
+                           }
 
         contact.append(content_contact)
         content_contact={}
