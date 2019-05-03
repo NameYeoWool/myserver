@@ -1,6 +1,8 @@
 from django.db import models
 from django.utils import timezone
 
+
+
 class Room(models.Model):
     name = models.CharField(max_length=200)
     address = models.CharField(max_length=300,primary_key=True)
@@ -23,7 +25,7 @@ class Room(models.Model):
 class SeatInfo(models.Model):
         room = models.ForeignKey(Room,on_delete=models.CASCADE)
         data = models.TextField(blank=True)
-        seatImage = models.ImageField(blank=True)
+        seatImage = models.ImageField(blank=True,upload_to="seat_images/")
         created_date = models.DateTimeField(default=timezone.now)
 
         def __str__(self):
