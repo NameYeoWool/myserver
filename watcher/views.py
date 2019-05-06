@@ -11,6 +11,16 @@ from django.contrib.auth.decorators import login_required
 from django.http import StreamingHttpResponse
 from django.views.decorators.csrf import csrf_exempt
 
+def room_seat(request,pcname):
+    print(pcname)
+    room = Room.objects.filter(name__contains=pcname)
+    print(room[0])
+    # seatInfos = room[0].seatInfo_set.filter(created_date__lt=timezone.now()).order_by('-created_date')
+    seatInfos = room[0].seatinfo_set.filter(created_date__lt=timezone.now()).order_by('-created_date')
+    image_data = seatInfos[0].seatImage
+    print(image_data)
+
+    return HttpResponse(image_data, content_type="image/gif")
 
 def room_region(request,region):
     rooms_contact = Room.objects.filter(name__contains=region,contact=True).order_by('created_date')
