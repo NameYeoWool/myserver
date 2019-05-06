@@ -11,14 +11,37 @@ from django.contrib.auth.decorators import login_required
 from django.http import StreamingHttpResponse
 from django.views.decorators.csrf import csrf_exempt
 
-def room_seat(request,pcname):
-    print(pcname)
+
+def room_info(reqeust,pcname):
     room = Room.objects.filter(name__contains=pcname)
-    print(room[0])
-    # seatInfos = room[0].seatInfo_set.filter(created_date__lt=timezone.now()).order_by('-created_date')
+    room = room[0]
+    # notice = room[0].notice
+
+    cnt_empty = 0
+    seatInfos = room.seatinfo_set.filter(created_date__lt=timezone.now()).order_by('-created_date')
+    if len(seatInfos) > 0:
+        seatInfo = seatInfos[0]
+        seat_data = seatInfo.data
+        cnt_empty = json.loads(seat_data)['empty_seats']
+    # seat_data = json.dumps(seat_data, ensure_ascii=False)
+
+    content_contact = {'name': room.name,
+                       'address': room.address,
+                       'latitude': room.latitude,
+                       'longitude': room.longitude,
+                       'contact': room.contact,
+                       'notice': room.notice,
+                       'spec': room.spec,
+                       'cnt_empty': cnt_empty,
+                       }
+    return JsonResponse(content_contact,safe=False,json_dumps_params = {'ensure_ascii': False})
+
+
+
+def room_seat(request,pcname):
+    room = Room.objects.filter(name__contains=pcname)
     seatInfos = room[0].seatinfo_set.filter(created_date__lt=timezone.now()).order_by('-created_date')
     image_data = seatInfos[0].seatImage
-    print(image_data)
 
     return HttpResponse(image_data, content_type="image/gif")
 

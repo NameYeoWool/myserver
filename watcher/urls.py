@@ -13,6 +13,7 @@ urlpatterns = [
     # path('room/seat/<str:name>/',views.room_seat),
     path('room/seat/',views.room_seat),
     path('room/seat/<str:pcname>/',views.room_seat),
+    path('room/info/<str:pcname>/',views.room_info),
     path('room/<str:region>/',views.room_region),
 
 ]
