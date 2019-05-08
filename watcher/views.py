@@ -115,6 +115,7 @@ def seatInfo_save(request):
         room = Room.objects.filter(name__contains=pcName)
         seatInfo = SeatInfo(room=room[0],data=data,seatImage=file)
         seatInfo.save()
+        res = {"response":"ok"}
         return JsonResponse(json.dumps(res, ensure_ascii=False),safe=False)
 
 def room_test(request):
